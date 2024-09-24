@@ -13,6 +13,9 @@ learning_rate = 0.0001
 epochs = 50
 batch_size = 32
 
+import matplotlib
+matplotlib.use('TkAgg')
+
 class BPNN:
     __slots__ = ["learning_rate", "epochs", "batch_size", "activation", "units", "model", "score", "speed", "fpr",
                  "trainHistory","x_train", "x_test", "y_train", "y_test"]
@@ -78,7 +81,7 @@ class BPNN:
             model.add(Dense(self.units[i], activation=self.activation[i]))
         model.add(Dropout(0.5))
         model.add(Dense(4, activation='softmax'))  # 由于需要分类4个类别，最后一层需要输出 4
-        opt = keras.optimizers.adam(learning_rate=self.learning_rate)
+        opt = keras.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=opt, loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])  # 使用多分类，损失函数为sparse_categorical_crossentropy
         self.model = model
@@ -100,7 +103,7 @@ class BPNN:
             model.add(keras.layers.LeakyReLU(alpha=0.05))
         model.add(Dropout(0.5))
         model.add(Dense(4, activation='softmax'))  # 由于需要分类4个类别，最后一层需要输出 4
-        opt = keras.optimizers.adam(learning_rate=self.learning_rate)
+        opt = keras.optimizers.Adam(learning_rate=self.learning_rate)
         model.compile(optimizer=opt, loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])  # 使用多分类，损失函数为sparse_categorical_crossentropy
         self.model = model
@@ -139,7 +142,7 @@ class BPNN:
         print(f'FPR:{self.fpr}')
 
     def savemodel(self, file_name: str = 'BPNeuralNetwork'):
-        self.model.save('./pretrained/' + file_name + '.h5')
+        self.model.save('./pretrained/' + file_name + '.keras')
 
 
 # BP神经网络测试main函数
@@ -165,4 +168,4 @@ if __name__ == '__main__':
     axs[1].set_title('accuracy')
     axs[1].legend()
     fig.suptitle('BP Neural Network plots')
-    fig.show()
+    plt.show()
